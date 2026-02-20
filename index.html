@@ -1,103 +1,111 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>RivasaFoods - Coming Soon</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #38ada9, #079992);
-            color: white;
-            text-align: center;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AnswerScan AI</title>
 
-        header {
-            padding: 40px 20px 10px 20px;
-        }
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
 
-        h1 {
-            font-size: 40px;
-            margin-bottom: 10px;
-        }
+<style>
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
-        .coming {
-            font-size: 28px;
-            margin-top: 10px;
-            font-weight: bold;
-            color: #f6b93b;
-        }
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+  text-align: center;
+}
 
-        .container {
-            background: white;
-            color: black;
-            margin: 40px auto;
-            padding: 30px;
-            max-width: 500px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
+h1 {
+  margin-bottom: 20px;
+}
 
-        input, textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
+input {
+  margin: 15px 0;
+}
 
-        button {
-            padding: 12px;
-            width: 100%;
-            background: #079992;
-            color: white;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-        }
+button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #667eea;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
 
-        button:hover {
-            background: #38ada9;
-        }
+button:hover {
+  background: #5646c5;
+}
 
-        footer {
-            margin-top: 30px;
-            padding: 15px;
-        }
-
-        @media (max-width: 600px) {
-            .container {
-                margin: 20px;
-            }
-        }
-    </style>
+#output {
+  margin-top: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+  text-align: left;
+  background: #f3f3f3;
+  padding: 10px;
+  border-radius: 10px;
+}
+</style>
 </head>
 
 <body>
 
-<header>
-    <h1>RivasaFoods</h1>
-    <p>Pure • Fresh • Quality</p>
-    <div class="coming">🚀 COMING SOON 🚀</div>
-    <p>Packaged Drinking Water | Drinks | Chips</p>
-</header>
-
 <div class="container">
-    <h2>Be the First to Know!</h2>
-    <p>Leave your email and suggestions below.</p>
+<h1>📸 AnswerScan AI</h1>
 
-    <form>
-        <input type="text" placeholder="Your Name" required>
-        <input type="email" placeholder="Your Email" required>
-        <textarea rows="4" placeholder="Your Suggestions..."></textarea>
-        <button type="submit">Submit</button>
-    </form>
+<input type="file" id="imageInput">
+<br>
+<button onclick="processImage()">Extract & Search</button>
+
+<div id="output"></div>
 </div>
 
-<footer>
-    <p>© 2026 RivasaFoods. All Rights Reserved.</p>
-</footer>
+<script>
+function processImage() {
+  const file = document.getElementById('imageInput').files[0];
+  const output = document.getElementById('output');
+
+  if (!file) {
+    alert("Please upload an image!");
+    return;
+  }
+
+  output.innerHTML = "⏳ Reading text from image...";
+
+  Tesseract.recognize(
+    file,
+    'eng',
+    { logger: m => console.log(m) }
+  ).then(({ data: { text } }) => {
+
+    output.innerHTML = "<b>Extracted Question:</b><br><br>" + text;
+
+    const googleSearchLink = "https://www.google.com/search?q=" + encodeURIComponent(text);
+
+    output.innerHTML += `
+      <br><br>
+      <a href="${googleSearchLink}" target="_blank">
+      🔎 Search Detailed Answer on Google
+      </a>
+    `;
+  });
+}
+</script>
 
 </body>
 </html>
