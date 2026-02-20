@@ -1,109 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AnswerScan AI</title>
-
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-
+<title>AnswerAI</title>
 <style>
 body {
   margin: 0;
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  font-family: Arial, sans-serif;
+  background: #343541;
+  color: white;
 }
 
-.container {
-  background: white;
-  padding: 30px;
-  border-radius: 20px;
-  width: 90%;
-  max-width: 500px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-  text-align: center;
+.chat-container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
 }
 
-h1 {
-  margin-bottom: 20px;
+.message {
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
 }
 
-input {
-  margin: 15px 0;
+.user {
+  background: #444654;
+}
+
+.bot {
+  background: #202123;
+}
+
+input[type="file"] {
+  margin: 10px 0;
 }
 
 button {
-  padding: 12px 20px;
+  padding: 10px 20px;
+  background: #10a37f;
   border: none;
-  border-radius: 10px;
-  background: #667eea;
   color: white;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  transition: 0.3s;
 }
 
-button:hover {
-  background: #5646c5;
-}
-
-#output {
-  margin-top: 20px;
-  max-height: 200px;
-  overflow-y: auto;
-  text-align: left;
-  background: #f3f3f3;
+textarea {
+  width: 100%;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
+  border: none;
+  margin-top: 10px;
 }
 </style>
 </head>
-
 <body>
 
-<div class="container">
-<h1>📸 AnswerScan AI</h1>
+<div class="chat-container">
+  <h2>AnswerAI 🤖</h2>
 
-<input type="file" id="imageInput">
-<br>
-<button onclick="processImage()">Extract & Search</button>
+  <input type="file" id="imageInput">
+  <button onclick="sendQuestion()">Get Answer</button>
 
-<div id="output"></div>
+  <div id="chat"></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+
 <script>
-function processImage() {
-  const file = document.getElementById('imageInput').files[0];
-  const output = document.getElementById('output');
+async function sendQuestion() {
+  const file = document.getElementById("imageInput").files[0];
+  const chat = document.getElementById("chat");
 
   if (!file) {
-    alert("Please upload an image!");
+    alert("Upload image first");
     return;
   }
 
-  output.innerHTML = "⏳ Reading text from image...";
+  chat.innerHTML += `<div class="message user">📸 Reading question...</div>`;
 
-  Tesseract.recognize(
-    file,
-    'eng',
-    { logger: m => console.log(m) }
-  ).then(({ data: { text } }) => {
+  const { data: { text } } = await Tesseract.recognize(file, 'eng');
 
-    output.innerHTML = "<b>Extracted Question:</b><br><br>" + text;
+  chat.innerHTML += `<div class="message user">${text}</div>`;
+  chat.innerHTML += `<div class="message bot">🤖 Generating answer...</div>`;
 
-    const googleSearchLink = "https://www.google.com/search?q=" + encodeURIComponent(text);
-
-    output.innerHTML += `
-      <br><br>
-      <a href="${googleSearchLink}" target="_blank">
-      🔎 Search Detailed Answer on Google
-      </a>
-    `;
+  const response = await fetch("http://localhost:3000/ask", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question: text })
   });
+
+  const data = await response.json();
+
+  chat.innerHTML += `<div class="message bot">${data.answer}</div>`;
 }
 </script>
 
