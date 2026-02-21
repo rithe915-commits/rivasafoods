@@ -1,159 +1,355 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AnswerGPT</title>
-
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-
-<style>
-body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#343541;
-    color:white;
-    display:flex;
-    height:100vh;
-}
-
-.sidebar{
-    width:250px;
-    background:#202123;
-    padding:20px;
-}
-
-.sidebar h2{
-    font-size:18px;
-}
-
-.chat-area{
-    flex:1;
-    display:flex;
-    flex-direction:column;
-}
-
-.messages{
-    flex:1;
-    overflow-y:auto;
-    padding:20px;
-}
-
-.message{
-    max-width:70%;
-    padding:15px;
-    margin:10px 0;
-    border-radius:10px;
-    line-height:1.5;
-}
-
-.user{
-    background:#444654;
-    align-self:flex-end;
-}
-
-.bot{
-    background:#202123;
-    border:1px solid #444;
-}
-
-.input-area{
-    padding:15px;
-    background:#40414f;
-    display:flex;
-    gap:10px;
-}
-
-input[type="file"]{
-    color:white;
-}
-
-button{
-    background:#10a37f;
-    border:none;
-    color:white;
-    padding:10px 20px;
-    border-radius:5px;
-    cursor:pointer;
-}
-
-button:hover{
-    background:#0e8c6b;
-}
-</style>
-</head>
-
-<body>
-
-<div class="sidebar">
-    <h2>AnswerGPT 🤖</h2>
-    <p>Upload question image</p>
-</div>
-
-<div class="chat-area">
-
-    <div class="messages" id="messages"></div>
-
-    <div class="input-area">
-        <input type="file" id="imageInput">
-        <button onclick="processImage()">Send</button>
-    </div>
-
-</div>
-
-<script>
-
-function addMessage(text, type){
-    const msg = document.createElement("div");
-    msg.classList.add("message", type);
-    msg.innerHTML = text;
-    document.getElementById("messages").appendChild(msg);
-    document.getElementById("messages").scrollTop = 999999;
-}
-
-function typeEffect(text){
-    const msg = document.createElement("div");
-    msg.classList.add("message","bot");
-    document.getElementById("messages").appendChild(msg);
-
-    let i = 0;
-    function typing(){
-        if(i < text.length){
-            msg.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(typing,15);
-        }
-    }
-    typing();
-}
-
-async function processImage(){
-
-    const file = document.getElementById("imageInput").files[0];
-
-    if(!file){
-        alert("Upload image first");
-        return;
-    }
-
-    addMessage("📸 Reading image...", "user");
-
-    const { data: { text } } = await Tesseract.recognize(file,'eng');
-
-    addMessage(text, "user");
-
-    typeEffect("🤖 Analyzing your question...\n\n");
-
-    setTimeout(()=>{
-        typeEffect("Here is the detailed explanation of your question:\n\n" +
-        "1️⃣ Concept Explanation\n" +
-        "2️⃣ Step-by-step solution\n" +
-        "3️⃣ Final Answer\n\n" +
-        "If you want more explanation, upload another question.");
-    },1500);
-}
-
-</script>
-
-</body>
-</html>
+ (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
+diff --git a/index.html b/index.html
+index a905f28a95a773548c0d8a0a4cacd7330b6d2884..a77997c27993167ceebbfd73aea154fb41a09802 100644
+--- a/index.html
++++ b/index.html
+@@ -1,159 +1,215 @@
+ <!DOCTYPE html>
+ <html lang="en">
+ <head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+-<title>AnswerGPT</title>
+-
+-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
+-
++<title>Image to PDF | iLovePDF style</title>
++<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+ <style>
+-body{
+-    margin:0;
+-    font-family:Arial, sans-serif;
+-    background:#343541;
+-    color:white;
+-    display:flex;
+-    height:100vh;
+-}
+-
+-.sidebar{
+-    width:250px;
+-    background:#202123;
+-    padding:20px;
+-}
+-
+-.sidebar h2{
+-    font-size:18px;
+-}
+-
+-.chat-area{
+-    flex:1;
+-    display:flex;
+-    flex-direction:column;
+-}
+-
+-.messages{
+-    flex:1;
+-    overflow-y:auto;
+-    padding:20px;
+-}
+-
+-.message{
+-    max-width:70%;
+-    padding:15px;
+-    margin:10px 0;
+-    border-radius:10px;
+-    line-height:1.5;
+-}
+-
+-.user{
+-    background:#444654;
+-    align-self:flex-end;
+-}
+-
+-.bot{
+-    background:#202123;
+-    border:1px solid #444;
+-}
+-
+-.input-area{
+-    padding:15px;
+-    background:#40414f;
+-    display:flex;
+-    gap:10px;
+-}
+-
+-input[type="file"]{
+-    color:white;
+-}
+-
+-button{
+-    background:#10a37f;
+-    border:none;
+-    color:white;
+-    padding:10px 20px;
+-    border-radius:5px;
+-    cursor:pointer;
+-}
+-
+-button:hover{
+-    background:#0e8c6b;
+-}
++  :root {
++    --red: #e5322d;
++    --dark: #1f2937;
++    --muted: #6b7280;
++    --bg: #f5f5f7;
++  }
++
++  * { box-sizing: border-box; }
++
++  body {
++    margin: 0;
++    font-family: Inter, Arial, sans-serif;
++    background: var(--bg);
++    color: var(--dark);
++  }
++
++  .topbar {
++    display: flex;
++    justify-content: space-between;
++    align-items: center;
++    background: white;
++    border-bottom: 1px solid #e5e7eb;
++    padding: 14px 24px;
++  }
++
++  .logo {
++    font-size: 24px;
++    font-weight: 700;
++  }
++
++  .logo .highlight { color: var(--red); }
++
++  main {
++    min-height: calc(100vh - 60px);
++    display: grid;
++    place-items: center;
++    padding: 24px;
++  }
++
++  .card {
++    width: min(900px, 100%);
++    background: white;
++    border-radius: 16px;
++    padding: 40px 24px;
++    text-align: center;
++    box-shadow: 0 16px 40px rgba(17, 24, 39, 0.1);
++  }
++
++  h1 {
++    margin: 0;
++    font-size: 44px;
++    line-height: 1.1;
++  }
++
++  .subtitle {
++    margin: 12px auto 30px;
++    color: var(--muted);
++    max-width: 660px;
++    font-size: 18px;
++  }
++
++  #fileInput { display: none; }
++
++  .pick-file-btn {
++    background: var(--red);
++    color: white;
++    border: 0;
++    padding: 18px 30px;
++    border-radius: 12px;
++    font-size: 20px;
++    font-weight: 700;
++    cursor: pointer;
++    transition: transform 0.2s ease, filter 0.2s ease;
++  }
++
++  .pick-file-btn:hover {
++    transform: translateY(-1px);
++    filter: brightness(1.05);
++  }
++
++  .preview {
++    margin-top: 26px;
++    display: none;
++  }
++
++  .preview img {
++    max-width: 100%;
++    max-height: 360px;
++    border-radius: 12px;
++    border: 1px solid #e5e7eb;
++    object-fit: contain;
++  }
++
++  .filename {
++    margin-top: 10px;
++    color: var(--muted);
++  }
++
++  .convert-btn {
++    margin-top: 20px;
++    display: none;
++    background: #111827;
++    color: white;
++    border: 0;
++    padding: 14px 24px;
++    border-radius: 10px;
++    font-size: 16px;
++    font-weight: 600;
++    cursor: pointer;
++  }
++
++  .status {
++    margin-top: 14px;
++    color: #065f46;
++    font-weight: 600;
++    min-height: 20px;
++  }
+ </style>
+ </head>
+-
+ <body>
++  <header class="topbar">
++    <div class="logo"><span class="highlight">iLove</span>PDF</div>
++    <small>Image to PDF Converter</small>
++  </header>
+ 
+-<div class="sidebar">
+-    <h2>AnswerGPT 🤖</h2>
+-    <p>Upload question image</p>
+-</div>
+-
+-<div class="chat-area">
++  <main>
++    <section class="card">
++      <h1>JPG to PDF</h1>
++      <p class="subtitle">Convert image files to PDF in one click. Upload your photo, preview it, and download the converted PDF instantly.</p>
+ 
+-    <div class="messages" id="messages"></div>
++      <label for="fileInput" class="pick-file-btn">Select JPG image</label>
++      <input id="fileInput" type="file" accept="image/*">
+ 
+-    <div class="input-area">
+-        <input type="file" id="imageInput">
+-        <button onclick="processImage()">Send</button>
+-    </div>
++      <div class="preview" id="previewBox">
++        <img id="previewImage" alt="Selected preview">
++        <div class="filename" id="fileName"></div>
++      </div>
+ 
+-</div>
++      <button class="convert-btn" id="convertBtn" type="button">Convert to PDF</button>
++      <div class="status" id="statusText"></div>
++    </section>
++  </main>
+ 
+ <script>
+-
+-function addMessage(text, type){
+-    const msg = document.createElement("div");
+-    msg.classList.add("message", type);
+-    msg.innerHTML = text;
+-    document.getElementById("messages").appendChild(msg);
+-    document.getElementById("messages").scrollTop = 999999;
+-}
+-
+-function typeEffect(text){
+-    const msg = document.createElement("div");
+-    msg.classList.add("message","bot");
+-    document.getElementById("messages").appendChild(msg);
+-
+-    let i = 0;
+-    function typing(){
+-        if(i < text.length){
+-            msg.innerHTML += text.charAt(i);
+-            i++;
+-            setTimeout(typing,15);
+-        }
++  const fileInput = document.getElementById('fileInput');
++  const previewBox = document.getElementById('previewBox');
++  const previewImage = document.getElementById('previewImage');
++  const fileName = document.getElementById('fileName');
++  const convertBtn = document.getElementById('convertBtn');
++  const statusText = document.getElementById('statusText');
++
++  let selectedFile = null;
++
++  fileInput.addEventListener('change', () => {
++    const file = fileInput.files[0];
++    if (!file) {
++      return;
+     }
+-    typing();
+-}
+ 
+-async function processImage(){
++    selectedFile = file;
++    previewImage.src = URL.createObjectURL(file);
++    fileName.textContent = file.name;
++    previewBox.style.display = 'block';
++    convertBtn.style.display = 'inline-block';
++    statusText.textContent = '';
++  });
++
++  convertBtn.addEventListener('click', async () => {
++    if (!selectedFile) {
++      statusText.textContent = 'Please select an image first.';
++      return;
++    }
+ 
+-    const file = document.getElementById("imageInput").files[0];
++    statusText.textContent = 'Converting...';
+ 
+-    if(!file){
+-        alert("Upload image first");
+-        return;
+-    }
++    const reader = new FileReader();
++    reader.onload = function (event) {
++      const img = new Image();
++      img.onload = function () {
++        const { jsPDF } = window.jspdf;
+ 
+-    addMessage("📸 Reading image...", "user");
++        const imgWidth = img.width;
++        const imgHeight = img.height;
++        const orientation = imgWidth >= imgHeight ? 'l' : 'p';
+ 
+-    const { data: { text } } = await Tesseract.recognize(file,'eng');
++        const pdf = new jsPDF({
++          orientation,
++          unit: 'pt',
++          format: [imgWidth, imgHeight]
++        });
+ 
+-    addMessage(text, "user");
++        const imageType = selectedFile.type === 'image/png' ? 'PNG' : 'JPEG';
++        pdf.addImage(event.target.result, imageType, 0, 0, imgWidth, imgHeight);
+ 
+-    typeEffect("🤖 Analyzing your question...\n\n");
++        const cleanName = selectedFile.name.replace(/\.[^/.]+$/, '');
++        pdf.save(`${cleanName}.pdf`);
++        statusText.textContent = 'Done! Your PDF download has started.';
++      };
+ 
+-    setTimeout(()=>{
+-        typeEffect("Here is the detailed explanation of your question:\n\n" +
+-        "1️⃣ Concept Explanation\n" +
+-        "2️⃣ Step-by-step solution\n" +
+-        "3️⃣ Final Answer\n\n" +
+-        "If you want more explanation, upload another question.");
+-    },1500);
+-}
++      img.src = event.target.result;
++    };
+ 
++    reader.readAsDataURL(selectedFile);
++  });
+ </script>
+-
+ </body>
+ </html>
+ 
+EOF
+)
