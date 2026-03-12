@@ -3,7 +3,44 @@
 <head>
 <title>AI Study Helper</title>
 
-<style>
+<.chat-box{
+height:300px;
+overflow-y:auto;
+background:#f5f5f5;
+padding:15px;
+border-radius:10px;
+margin-top:20px;
+}
+
+.message{
+padding:10px;
+margin:5px 0;
+border-radius:8px;
+max-width:80%;
+}
+
+.user{
+background:#4CAF50;
+color:white;
+margin-left:auto;
+}
+
+.ai{
+background:#e0e0e0;
+}
+
+.input-area{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.input-area input{
+flex:1;
+padding:10px;
+border-radius:6px;
+border:1px solid #ccc;
+}>
 
 body{
 font-family:Arial;
@@ -98,14 +135,12 @@ text-decoration:underline;
 <button class="tool-btn" onclick="setMode('answer')">Exam Answer</button>
 </div>
 
-<textarea id="question" placeholder="Type your question here"></textarea>
+<div class="chat-box" id="chat"></div>
 
-<br>
-
-<button onclick="generateAnswer()">Generate</button>
-
-<div id="result">Result will appear here...</div>
-
+<div class="input-area">
+<input id="question" placeholder="Ask a study question..." />
+<button onclick="generateAnswer()">Send</button>
+</div>
 <h3>Example Questions</h3>
 
 <ul>
