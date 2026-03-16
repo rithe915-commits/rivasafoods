@@ -1,195 +1,102 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>AI Study Helper</title>
+<title>Day Predictor AI</title>
 
-
-
-.message{
-padding:10px;
-margin:5px 0;
-border-radius:8px;
-max-width:80%;
-}
-
-.user{
-background:#4CAF50;
-color:white;
-margin-left:auto;
-}
-
-.ai{
-background:#e0e0e0;
-}
-
-.input-area{
-display:flex;
-gap:10px;
-margin-top:10px;
-}
-
-.input-area input{
-flex:1;
-padding:10px;
-border-radius:6px;
-border:1px solid #ccc;
-}>
-
+<style>
 body{
-font-family:Arial;
-background:#eef2f7;
-text-align:center;
-padding:40px;
-}
-
-.container{
-background:white;
-width:700px;
-margin:auto;
-padding:30px;
-border-radius:12px;
-box-shadow:0 10px 20px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+    background:#111;
+    color:white;
+    text-align:center;
+    padding-top:80px;
 }
 
 h1{
-margin-bottom:10px;
+    font-size:40px;
 }
 
-textarea{
-width:100%;
-height:120px;
-padding:10px;
-font-size:16px;
-border-radius:8px;
-border:1px solid #ccc;
-margin-top:10px;
+.container{
+    margin-top:30px;
 }
 
 button{
-padding:10px 18px;
-border:none;
-border-radius:8px;
-background:#4CAF50;
-color:white;
-font-size:16px;
-cursor:pointer;
-margin-top:10px;
+    padding:12px 20px;
+    margin:6px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
 }
 
-button:hover{
-background:#43a047;
+.day-btn{
+    background:#2c2c2c;
+    color:white;
 }
 
-.tool-btn{
-background:#2196F3;
-margin:5px;
-}
-
-.tool-btn:hover{
-background:#1976D2;
+.predict{
+    background:#ff4444;
+    color:white;
+    font-weight:bold;
 }
 
 #result{
-margin-top:20px;
-padding:15px;
-background:#f5f5f5;
-border-radius:8px;
-text-align:left;
-white-space:pre-wrap;
+    margin-top:25px;
+    font-size:24px;
 }
-
-ul{
-text-align:left;
-}
-
-li{
-cursor:pointer;
-color:#1565C0;
-margin:5px 0;
-}
-
-li:hover{
-text-decoration:underline;
-}
-
 </style>
+
 </head>
 
 <body>
 
+<h1>Day Predictor AI</h1>
+
+<h3>Select today</h3>
+
 <div class="container">
 
-<h1>📚 AI Study Helper</h1>
-<p>Generate notes, MCQs, and exam answers instantly</p>
+<button class="day-btn" onclick="setDay(0)">Monday</button>
+<button class="day-btn" onclick="setDay(1)">Tuesday</button>
+<button class="day-btn" onclick="setDay(2)">Wednesday</button>
+<button class="day-btn" onclick="setDay(3)">Thursday</button>
+<button class="day-btn" onclick="setDay(4)">Friday</button>
+<button class="day-btn" onclick="setDay(5)">Saturday</button>
+<button class="day-btn" onclick="setDay(6)">Sunday</button>
 
-<div>
-<button class="tool-btn" onclick="setMode('notes')">Notes</button>
-<button class="tool-btn" onclick="setMode('mcq')">MCQ</button>
-<button class="tool-btn" onclick="setMode('answer')">Exam Answer</button>
-</div>
+<br><br>
 
-<div class="chat-box" id="chat"></div>
-
-<div class="input-area">
-<input id="question" placeholder="Ask a study question..." />
-<button onclick="generateAnswer()">Send</button>
-</div>
-<h3>Example Questions</h3>
-
-<ul>
-<li onclick="fill('Explain Bus Topology')">Explain Bus Topology</li>
-<li onclick="fill('Explain TCP/IP protocol')">Explain TCP/IP Protocol</li>
-<li onclick="fill('Advantages of Microcontroller')">Advantages of Microcontroller</li>
-<li onclick="fill('What is Ring Topology')">What is Ring Topology</li>
-</ul>
+<button class="predict" onclick="predict()">PREDICT</button>
 
 </div>
+
+<div id="result"></div>
 
 <script>
 
-let mode = "answer";
+let today = null;
 
-function setMode(m){
-mode = m;
+function setDay(day){
+    today = day;
 }
 
-function fill(text){
-document.getElementById("question").value = text;
-}
+function predict(){
 
-async function generateAnswer(){
+    if(today === null){
+        document.getElementById("result").innerText="Select a day first!";
+        return;
+    }
 
-let question = document.getElementById("question").value;
+    const days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
 
-document.getElementById("result").innerText = "Generating...";
+    let tomorrow = (today + 1) % 7;
 
-let response = await fetch(
-"https://purple-water-94db.rithe915.workers.dev",
-{
-method:"POST",
-headers:{
-"Authorization":"Bearer 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",
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-inputs: mode + " for exam: " + question
-})
-}
-);
-
-let data = await response.json();
-
-if(data.error){
-document.getElementById("result").innerText = "Model loading... please try again.";
-return;
-}
-
-document.getElementById("result").innerText =
-data[0].generated_text;
+    document.getElementById("result").innerText =
+    "Tomorrow will be " + days[tomorrow];
 
 }
 
-</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>
+</script>
 
 </body>
 </html>
