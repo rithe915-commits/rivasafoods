@@ -1,98 +1,115 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Day Predictor AI</title>
+<meta charset="UTF-8">
+<title>AI Homework Solver</title>
 
 <style>
-body{
-    font-family: Arial, sans-serif;
-    background:#111;
-    color:white;
-    text-align:center;
-    padding-top:80px;
-}
 
-h1{
-    font-size:40px;
+body{
+background:#0f172a;
+font-family:Arial, sans-serif;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
 }
 
 .container{
-    margin-top:30px;
+background:#1e293b;
+padding:40px;
+border-radius:15px;
+width:420px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+h1{
+margin-bottom:20px;
+font-weight:600;
+}
+
+textarea{
+width:100%;
+height:120px;
+border-radius:10px;
+border:none;
+padding:10px;
+font-size:15px;
+outline:none;
+resize:none;
 }
 
 button{
-    padding:12px 20px;
-    margin:6px;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-    cursor:pointer;
+margin-top:15px;
+padding:12px 25px;
+border:none;
+border-radius:8px;
+background:#38bdf8;
+color:white;
+font-size:16px;
+cursor:pointer;
 }
 
-.day-btn{
-    background:#2c2c2c;
-    color:white;
-}
-
-.predict{
-    background:#ff4444;
-    color:white;
-    font-weight:bold;
+button:hover{
+background:#0ea5e9;
 }
 
 #result{
-    margin-top:25px;
-    font-size:24px;
+margin-top:20px;
+background:#0f172a;
+padding:15px;
+border-radius:10px;
+min-height:60px;
 }
-</style>
 
+</style>
 </head>
 
 <body>
 
-<h1>Day Predictor AI</h1>
-
-<h3>Select today</h3>
-
 <div class="container">
 
-<button class="day-btn" onclick="setDay(0)">Monday</button>
-<button class="day-btn" onclick="setDay(1)">Tuesday</button>
-<button class="day-btn" onclick="setDay(2)">Wednesday</button>
-<button class="day-btn" onclick="setDay(3)">Thursday</button>
-<button class="day-btn" onclick="setDay(4)">Friday</button>
-<button class="day-btn" onclick="setDay(5)">Saturday</button>
-<button class="day-btn" onclick="setDay(6)">Sunday</button>
+<h1>AI Homework Solver</h1>
 
-<br><br>
+<textarea id="question" placeholder="Type your homework question..."></textarea>
 
-<button class="predict" onclick="predict()">PREDICT</button>
+<button onclick="solve()">Solve</button>
+
+<div id="result">Answer will appear here</div>
 
 </div>
 
-<div id="result"></div>
-
 <script>
 
-let today = null;
+async function solve(){
 
-function setDay(day){
-    today = day;
-}
+let question=document.getElementById("question").value;
 
-function predict(){
+document.getElementById("result").innerText="Thinking...";
 
-    if(today === null){
-        document.getElementById("result").innerText="Select a day first!";
-        return;
-    }
+const response = await fetch(
+"https://api-inference.huggingface.co/models/google/flan-t5-large",
+{
+method:"POST",
 
-    const days = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+headers:{
+"Authorization":"Bearer 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",
+"Content-Type":"application/json"
+},
 
-    let tomorrow = (today + 1) % 7;
+body:JSON.stringify({
+inputs:"Solve this step by step: "+question
+})
 
-    document.getElementById("result").innerText =
-    "Tomorrow will be " + days[tomorrow];
+});
+
+let data = await response.json();
+
+document.getElementById("result").innerText =
+data[0].generated_text;
 
 }
 
