@@ -1,361 +1,370 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>AI Homework Solver</title>
 
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&amp;family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-dim": "#d7dbd8",
+                    "on-primary-fixed-variant": "#3f5d74",
+                    "secondary": "#496554",
+                    "on-tertiary-container": "#613e1e",
+                    "outline": "#777c79",
+                    "tertiary-fixed": "#f9c49a",
+                    "primary": "#446279",
+                    "on-secondary-container": "#3c5847",
+                    "primary-fixed": "#c4e3ff",
+                    "outline-variant": "#afb3b0",
+                    "tertiary-container": "#f9c49a",
+                    "surface": "#f9f9f7",
+                    "secondary-container": "#caead4",
+                    "surface-tint": "#446279",
+                    "secondary-fixed": "#caead4",
+                    "background": "#f9f9f7",
+                    "on-tertiary-fixed-variant": "#6c4726",
+                    "surface-variant": "#e0e3e0",
+                    "primary-dim": "#38566d",
+                    "surface-container": "#eceeec",
+                    "inverse-on-surface": "#9c9d9b",
+                    "on-background": "#2f3332",
+                    "on-primary-fixed": "#214156",
+                    "secondary-fixed-dim": "#bcdcc7",
+                    "inverse-primary": "#c4e3ff",
+                    "on-secondary-fixed": "#294536",
+                    "on-secondary-fixed-variant": "#456251",
+                    "surface-bright": "#f9f9f7",
+                    "on-surface-variant": "#5c605e",
+                    "surface-container-low": "#f3f4f2",
+                    "tertiary-dim": "#704b2a",
+                    "secondary-dim": "#3d5949",
+                    "primary-fixed-dim": "#b6d5f0",
+                    "inverse-surface": "#0d0f0e",
+                    "error-container": "#fa746f",
+                    "on-primary-container": "#35536a",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary": "#e6ffed",
+                    "error": "#a83836",
+                    "on-surface": "#2f3332",
+                    "on-tertiary": "#fff7f4",
+                    "on-error-container": "#6e0a12",
+                    "on-primary": "#f5f9ff",
+                    "surface-container-high": "#e6e9e6",
+                    "tertiary": "#7e5734",
+                    "on-tertiary-fixed": "#4b2b0c",
+                    "error-dim": "#67040d",
+                    "on-error": "#fff7f6",
+                    "tertiary-fixed-dim": "#eab78d",
+                    "surface-container-highest": "#e0e3e0",
+                    "primary-container": "#c4e3ff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Lexend"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"]
+            }
+          },
+        },
+      }
+    </script>
 <style>
-
-body{
-background:#0f172a;
-font-family:Arial, sans-serif;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
-}
-
-.container{
-background:#1e293b;
-padding:40px;
-border-radius:15px;
-width:420px;
-text-align:center;
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
-
-h1{
-margin-bottom:20px;
-}
-
-textarea{
-width:100%;
-height:120px;
-border-radius:10px;
-border:none;
-padding:10px;
-font-size:15px;
-outline:none;
-resize:none;
-}
-
-button{
-margin-top:12px;
-padding:12px 20px;
-border:none;
-border-radius:8px;
-background:#38bdf8;
-color:white;
-font-size:16px;
-cursor:pointer;
-}
-
-button:hover{
-background:#0ea5e9;
-}
-
-input{
-margin-top:10px;
-}
-
-#result{
-margin-top:20px;
-background:#0f172a;
-padding:15px;
-border-radius:10px;
-min-height:60px;
-white-space:pre-wrap;
-}
-
-</style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        h1, h2, h3 { font-family: 'Lexend', sans-serif; }
+    </style>
 </head>
-
-<body>
-
-<div class="container">
-
-<h1>AI Homework Solver</h1>
-
-<textarea id="question" placeholder="Type your homework question..."></textarea>
-
-<br>
-
-<button onclick="solve()">Solve</button>
-
-<br><br>
-
-<input type="file" id="imageInput" accept="image/*">
-
-<br>
-
-<button onclick="solveImage()">Solve From Photo</button>
-
-<div id="result">Answer will appear here</div>
-
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#f3f4f2] dark:bg-slate-900 flex flex-col py-8 px-4 z-50">
+<div class="mb-10 px-4">
+<h1 class="text-2xl font-bold text-[#446279] dark:text-blue-200 tracking-tight">The Sanctuary</h1>
+<p class="text-xs font-medium text-on-surface-variant opacity-70">Academic Workspace</p>
 </div>
-
-<script>
-
-const API_TOKEN = "<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>AI Homework Solver</title>
-
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@4/dist/tesseract.min.js"></script>
-
-<style>
-
-body{
-background:#0f172a;
-font-family:Arial, sans-serif;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-margin:0;
-}
-
-.container{
-background:#1e293b;
-padding:40px;
-border-radius:15px;
-width:420px;
-text-align:center;
-box-shadow:0 10px 30px rgba(0,0,0,0.4);
-}
-
-h1{
-margin-bottom:20px;
-}
-
-textarea{
-width:100%;
-height:120px;
-border-radius:10px;
-border:none;
-padding:10px;
-font-size:15px;
-outline:none;
-resize:none;
-}
-
-button{
-margin-top:12px;
-padding:12px 20px;
-border:none;
-border-radius:8px;
-background:#38bdf8;
-color:white;
-font-size:16px;
-cursor:pointer;
-}
-
-button:hover{
-background:#0ea5e9;
-}
-
-input{
-margin-top:10px;
-}
-
-#result{
-margin-top:20px;
-background:#0f172a;
-padding:15px;
-border-radius:10px;
-min-height:60px;
-white-space:pre-wrap;
-}
-
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>AI Homework Solver</h1>
-
-<textarea id="question" placeholder="Type your homework question..."></textarea>
-
-<br>
-
-<button onclick="solve()">Solve</button>
-
-<br><br>
-
-<input type="file" id="imageInput" accept="image/*">
-
-<br>
-
-<button onclick="solveImage()">Solve From Photo</button>
-
-<div id="result">Answer will appear here</div>
-
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 font-medium hover:bg-[#e6e9e6] dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 font-medium hover:bg-[#e6e9e6] dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span>Timetable</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 dark:text-slate-400 font-medium hover:bg-[#e6e9e6] dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="auto_stories">auto_stories</span>
+<span>AI Notes</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#446279] dark:text-blue-200 font-bold border-r-4 border-[#446279] hover:bg-[#e6e9e6] dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="analytics">analytics</span>
+<span>Analytics</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 space-y-1">
+<button class="w-full bg-primary text-on-primary py-3 rounded-xl font-semibold text-sm mb-6 flex items-center justify-center gap-2 scale-98 active:opacity-80 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Study Session
+            </button>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 font-medium hover:bg-[#e6e9e6] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-slate-500 font-medium hover:bg-[#e6e9e6] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>Support</span>
+</a>
 </div>
-
-<script>
-
-const API_TOKEN = "YOUR_HF_TOKEN";
-
-async function solve(){
-
-let question = document.getElementById("question").value;
-
-solveText(question);
-
-}
-
-async function solveText(question){
-
-document.getElementById("result").innerText = "Thinking...";
-
-try{
-
-const response = await fetch(
-"https://api-inference.huggingface.co/models/google/flan-t5-large",
-{
-method:"POST",
-
-headers:{
-"Authorization":"Bearer " + API_TOKEN,
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-inputs:"Solve this step by step: " + question
-})
-
-});
-
-const data = await response.json();
-
-if(Array.isArray(data)){
-document.getElementById("result").innerText = data[0].generated_text;
-}
-else if(data.generated_text){
-document.getElementById("result").innerText = data.generated_text;
-}
-else{
-document.getElementById("result").innerText = "No answer received.";
-}
-
-}catch(error){
-
-document.getElementById("result").innerText = "Error connecting to AI.";
-
-}
-
-}
-
-async function solveImage(){
-
-const file = document.getElementById("imageInput").files[0];
-
-if(!file){
-alert("Upload an image first");
-return;
-}
-
-document.getElementById("result").innerText = "Reading image...";
-
-const { data: { text } } = await Tesseract.recognize(
-file,
-'eng'
-);
-
-document.getElementById("result").innerText =
-"Detected question:\n" + text + "\n\nSolving...";
-
-solveText(text);
-
-}
-
-</script>
-
-</body>
-</html>";
-
-async function solve(){
-
-let question = document.getElementById("question").value;
-
-solveText(question);
-
-}
-
-async function solveText(question){
-
-document.getElementById("result").innerText = "Thinking...";
-
-try{
-
-const response = await fetch(
-"https://api-inference.huggingface.co/models/google/flan-t5-large",
-{
-method:"POST",
-
-headers:{
-"Authorization":"Bearer " + API_TOKEN,
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-inputs:"Solve this step by step: " + question
-})
-
-});
-
-const data = await response.json();
-
-if(Array.isArray(data)){
-document.getElementById("result").innerText = data[0].generated_text;
-}
-else if(data.generated_text){
-document.getElementById("result").innerText = data.generated_text;
-}
-else{
-document.getElementById("result").innerText = "No answer received.";
-}
-
-}catch(error){
-
-document.getElementById("result").innerText = "Error connecting to AI.";
-
-}
-
-}
-
-async function solveImage(){
-
-const file = document.getElementById("imageInput").files[0];
-
-if(!file){
-alert("Upload an image first");
-return;
-}
-
-document.getElementById("result").innerText = "Reading image...";
-
-const { data: { text } } = await Tesseract.recognize(
-file,
-'eng'
-);
-
-document.getElementById("result").innerText =
-"Detected question:\n" + text + "\n\nSolving...";
-
-solveText(text);
-
-}
-
-</script>
-
-</body>
-</html>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-[#f9f9f7]/80 backdrop-blur-md flex justify-between items-center h-16 px-8 shadow-sm">
+<div class="flex items-center gap-8">
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-outline" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-highest border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-primary/10 transition-all" placeholder="Search insights..." type="text"/>
+</div>
+<nav class="flex gap-6">
+<a class="text-slate-600 font-medium hover:text-[#446279] transition-opacity" href="#">My Library</a>
+<a class="text-slate-600 font-medium hover:text-[#446279] transition-opacity" href="#">Study Groups</a>
+</nav>
+</div>
+<div class="flex items-center gap-5">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer" data-icon="dark_mode">dark_mode</span>
+<div class="h-8 w-8 rounded-full bg-primary-container overflow-hidden">
+<img alt="User profile" data-alt="Close up portrait of a young male student with glasses smiling softly in a library setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD8stXUYb19fXPvN9FtMGlM9JrjYBkO6ebT3_p_E37rHkkLrYxAV51Wicyw3VtX5nrLKrDVMj5_LTOWLHKvZkw5nFEOMfINFk_aaHQVqCHvu4dRwtvKFC-AsdPVr2loDHU7xLZtXcPB7LuLaQZseRzmuyp2RNBQMHB9ei2PXyCussAZi6X1Zw9P8uirbD_jmCYuFniYwe-QsdZZvh_7h0CwE0sanVWZ3VFCtzrXxotCndFK8ktL972lEpi1B_QenZvfDGQEg0-m6Fc"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 pb-12 px-10 min-h-screen">
+<div class="max-w-6xl mx-auto">
+<!-- Header Section -->
+<header class="flex justify-between items-end mb-12">
+<div class="space-y-1">
+<h2 class="text-4xl font-bold text-on-surface tracking-tight">Academic Momentum</h2>
+<p class="text-on-surface-variant max-w-md">Your intellectual growth, quantified. Deep work sessions are up 12% this week.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-5 py-2.5 rounded-lg bg-surface-container-lowest text-on-surface font-semibold text-sm shadow-sm hover:bg-surface-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="download">download</span>
+                        Export Report
+                    </button>
+<button class="px-5 py-2.5 rounded-lg bg-primary text-on-primary font-semibold text-sm shadow-md hover:bg-primary-dim transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="refresh">refresh</span>
+                        Update Data
+                    </button>
+</div>
+</header>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Main Analytics Chart (Glassmorphism Card) -->
+<div class="col-span-8 bg-surface-container-lowest rounded-xl p-8 shadow-sm border border-outline-variant/10">
+<div class="flex justify-between items-center mb-10">
+<h3 class="text-xl font-bold">Study Intensity Week</h3>
+<div class="flex gap-2 text-xs font-semibold text-outline">
+<span class="px-3 py-1 bg-surface-container rounded-full cursor-pointer hover:bg-primary/10">DAILY</span>
+<span class="px-3 py-1 bg-primary text-on-primary rounded-full cursor-pointer">WEEKLY</span>
+<span class="px-3 py-1 bg-surface-container rounded-full cursor-pointer hover:bg-primary/10">MONTHLY</span>
+</div>
+</div>
+<!-- Simplified Visual Bar Chart -->
+<div class="flex items-end justify-between h-64 gap-4 px-4">
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-surface-container-high rounded-t-lg transition-all h-[40%] group-hover:bg-primary/20"></div>
+<span class="mt-4 text-xs font-bold text-outline">MON</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-surface-container-high rounded-t-lg transition-all h-[65%] group-hover:bg-primary/20"></div>
+<span class="mt-4 text-xs font-bold text-outline">TUE</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-primary-dim rounded-t-lg transition-all h-[95%]"></div>
+<span class="mt-4 text-xs font-bold text-primary">WED</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-surface-container-high rounded-t-lg transition-all h-[55%] group-hover:bg-primary/20"></div>
+<span class="mt-4 text-xs font-bold text-outline">THU</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-secondary rounded-t-lg transition-all h-[80%]"></div>
+<span class="mt-4 text-xs font-bold text-outline">FRI</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-surface-container-high rounded-t-lg transition-all h-[30%] group-hover:bg-primary/20"></div>
+<span class="mt-4 text-xs font-bold text-outline">SAT</span>
+</div>
+<div class="flex flex-col items-center w-full group">
+<div class="w-full bg-surface-container-high rounded-t-lg transition-all h-[45%] group-hover:bg-primary/20"></div>
+<span class="mt-4 text-xs font-bold text-outline">SUN</span>
+</div>
+</div>
+</div>
+<!-- Summary Stats (Stacked) -->
+<div class="col-span-4 space-y-6">
+<div class="bg-primary text-on-primary p-8 rounded-xl relative overflow-hidden">
+<div class="relative z-10">
+<p class="text-primary-fixed-dim text-sm font-medium mb-1">Total Time Studied</p>
+<h4 class="text-4xl font-bold">42.5<span class="text-xl font-normal ml-1">hrs</span></h4>
+<div class="mt-6 flex items-center gap-2 text-sm text-on-primary/80">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span>+4h from last week</span>
+</div>
+</div>
+<div class="absolute -right-8 -bottom-8 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="schedule" style="font-variation-settings: 'FILL' 1;">schedule</span>
+</div>
+</div>
+<div class="bg-secondary-container text-on-secondary-container p-8 rounded-xl relative overflow-hidden">
+<div class="relative z-10">
+<p class="text-on-secondary-fixed-variant text-sm font-medium mb-1">Chapters Conquered</p>
+<h4 class="text-4xl font-bold">18<span class="text-xl font-normal ml-1">/ 24</span></h4>
+<div class="mt-6 flex items-center gap-2 text-sm text-on-secondary-container/80">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+<span>3 chapters today</span>
+</div>
+</div>
+<div class="absolute -right-8 -bottom-8 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="auto_stories" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+</div>
+</div>
+</div>
+<!-- Subject Progress (Asymmetric Column) -->
+<div class="col-span-7 bg-surface-container-low rounded-xl p-8">
+<h3 class="text-xl font-bold mb-8">Subject Progress</h3>
+<div class="space-y-8">
+<div class="group">
+<div class="flex justify-between items-center mb-3">
+<span class="font-bold">Organic Chemistry</span>
+<span class="text-sm font-medium text-on-surface-variant">72%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-1000" style="width: 72%"></div>
+</div>
+<div class="mt-2 flex justify-between text-[10px] uppercase tracking-wider font-bold text-outline">
+<span>8/11 Chapters</span>
+<span>Next: Stereochemistry</span>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between items-center mb-3">
+<span class="font-bold">Modern Literature</span>
+<span class="text-sm font-medium text-on-surface-variant">45%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full transition-all duration-1000" style="width: 45%"></div>
+</div>
+<div class="mt-2 flex justify-between text-[10px] uppercase tracking-wider font-bold text-outline">
+<span>5/11 Chapters</span>
+<span>Next: Post-Modernism</span>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between items-center mb-3">
+<span class="font-bold">Advanced Calculus</span>
+<span class="text-sm font-medium text-on-surface-variant">91%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full transition-all duration-1000" style="width: 91%"></div>
+</div>
+<div class="mt-2 flex justify-between text-[10px] uppercase tracking-wider font-bold text-outline">
+<span>10/11 Chapters</span>
+<span>Complete: Integrals</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Achievements & Streaks (Focus Plate Style) -->
+<div class="col-span-5 bg-tertiary-container/30 rounded-xl p-8 border border-tertiary-fixed-dim/20">
+<div class="flex items-center gap-3 mb-8">
+<span class="material-symbols-outlined text-tertiary" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<h3 class="text-xl font-bold">Milestones</h3>
+</div>
+<div class="space-y-6">
+<!-- Current Streak -->
+<div class="flex items-center gap-6 p-4 bg-surface-container-lowest/60 rounded-xl">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-4xl text-error" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="text-lg font-bold">12</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Daily Streak</h4>
+<p class="text-xs text-on-surface-variant">Don't break the flow! 3 more days until 'Deep Work Master'.</p>
+</div>
+</div>
+<!-- Achievement Unlocked -->
+<div class="flex items-center gap-4 opacity-100">
+<div class="h-12 w-12 rounded-full bg-secondary text-on-secondary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+</div>
+<div>
+<h4 class="text-sm font-bold">The Early Bird</h4>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wide">Unlocked 2 days ago</p>
+</div>
+</div>
+<!-- Achievement Locked -->
+<div class="flex items-center gap-4 opacity-50">
+<div class="h-12 w-12 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+</div>
+<div>
+<h4 class="text-sm font-bold">Integrity Shield</h4>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wide">15 Deep Sessions Required</p>
+</div>
+</div>
+<!-- CTA for achievements -->
+<button class="w-full mt-4 py-3 border border-tertiary/20 rounded-xl text-tertiary font-bold text-sm hover:bg-tertiary/5 transition-colors">
+                            View All Badges
+                        </button>
+</div>
+</div>
+</div>
+<!-- Focus Plate Section (Asymmetric Highlight) -->
+<section class="mt-12 bg-secondary-container p-10 rounded-2xl flex items-center justify-between shadow-sm">
+<div class="max-w-xl">
+<span class="inline-block px-3 py-1 bg-secondary text-on-secondary text-[10px] font-bold rounded-full mb-4">WEEKLY INSIGHT</span>
+<h3 class="text-2xl font-bold mb-4">You focus best on Wednesdays between 08:00 and 11:00.</h3>
+<p class="text-on-secondary-container leading-relaxed">Consider scheduling your most difficult 'Advanced Calculus' chapters during this morning window to maximize cognitive retention.</p>
+</div>
+<div class="relative w-48 h-48 hidden lg:block">
+<img alt="Library concept" class="rounded-2xl shadow-xl transform rotate-3" data-alt="Minimalistic aesthetic shot of stacked vintage books and a classic round clock on a white desk with soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVmlHbijtqccG3hkZgizcpHnheXoTBLwdr5wpvrhQ6Rl8vwfNJsnePPFOL1Qajf_2wCRvnKbJGc5OdG2jn6plp54Hm8Bwpw9f5_4iae0FtCd3LQnaqqsP2lnnuydbvnkOCaQG2JAHxP2nz5vsr9mt2Huy41vIELWcMYXdYl7exEpP2PNj3RVdvsoMRoDFbXuKP29MBlToNuqPYALuKRf26M42QWkASts8hU6e8l9aFohmH7zb1o-2hwNpGm_BRt8AuJnrD4jX0rWI"/>
+<div class="absolute inset-0 border-2 border-primary/20 rounded-2xl transform -rotate-3 -z-10"></div>
+</div>
+</section>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface-container-lowest flex justify-around items-center z-50">
+<a class="text-on-surface-variant flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[10px] font-medium">Home</span>
+</a>
+<a class="text-on-surface-variant flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-[10px] font-medium">Tasks</span>
+</a>
+<div class="bg-primary h-12 w-12 rounded-full -mt-8 flex items-center justify-center text-on-primary shadow-lg">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+</div>
+<a class="text-primary flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="analytics" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span class="text-[10px] font-bold">Analytics</span>
+</a>
+<a class="text-on-surface-variant flex flex-col items-center" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</nav>
+</body></html>
